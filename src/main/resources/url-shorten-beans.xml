@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd">
+		
+	<context:component-scan base-package="com.mlc.url" />
+	<context:annotation-config/>
+	
+	<!-- HTTP -->
+    <bean id="connPool" class="org.apache.http.impl.conn.PoolingHttpClientConnectionManager" p:defaultMaxPerRoute="2000" p:maxTotal="4000" />
+    <bean id="httpClientBuilder" class="org.apache.http.impl.client.HttpClientBuilder" factory-method="create" p:connectionManager-ref="connPool"/>
+    <bean id="httpClient" factory-bean="httpClientBuilder" factory-method="build"/>
+    <bean id="clientHttpRequestFactory" class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory" c:_0-ref="httpClient" />
+    <bean class="org.springframework.web.client.RestTemplate" c:_0-ref="clientHttpRequestFactory">
+        <property name="messageConverters">
+            <list>
+            	<bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+    
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor" />
+	
+</beans>
