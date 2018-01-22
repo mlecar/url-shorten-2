@@ -4,6 +4,13 @@
 	<groupId>com.mlc.url</groupId>
 	<artifactId>url-shorten</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
+
+	<scm>
+		<connection>scm:git:https://github.com/mlecar/url-shorten-2</connection>
+		<developerConnection>scm:git:https://github.com/mlecar/url-shorten-2</developerConnection>
+		<url>https://github.com/mlecar/url-shorten-2</url>
+	</scm>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -40,14 +47,14 @@
 			<artifactId>jackson-annotations</artifactId>
 			<scope>compile</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
