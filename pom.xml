@@ -11,6 +11,13 @@
 		<url>https://github.com/mlecar/url-shorten-2</url>
 	</scm>
 
+	<distributionManagement>
+		<repository>
+			<id>maven-repository</id>
+			<url>file:///home/marcelolecar/dev/repository/maven-repository/</url>
+		</repository>
+	</distributionManagement>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
