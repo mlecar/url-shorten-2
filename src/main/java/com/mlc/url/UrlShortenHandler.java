@@ -17,12 +17,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
-import io.vertx.core.Handler;
 import io.vertx.core.http.HttpServerResponse;
 import io.vertx.ext.web.RoutingContext;
 
 @Component
-public class UrlShortenHandler implements Handler<RoutingContext> {
+public class UrlShortenHandler {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -39,8 +38,7 @@ public class UrlShortenHandler implements Handler<RoutingContext> {
     @Value("${google.api.key}")
     private String googleApiKey;
 
-    @Override
-    public void handle(RoutingContext rc) {
+    public void add(RoutingContext rc) {
 
         String longUrl = gson.fromJson(rc.getBodyAsString(), JsonElement.class).getAsJsonObject().get("longUrl").getAsString();
 
@@ -64,13 +62,49 @@ public class UrlShortenHandler implements Handler<RoutingContext> {
             repo.save(urlShorten);
         }
 
+        response(rc.response(), HttpResponseStatus.CREATED, gson.toJson(urlShorten));
+    }
+
+    public void getByShortUrl(RoutingContext rc) {
+        String jsonList = gson.toJson(repo.findOne(rc.request().getParam("shortUrl")));
+        response(rc.response(), HttpResponseStatus.OK, jsonList);
+    }
+
+    public void getAll(RoutingContext rc) {
+        String jsonList = gson.toJson(repo.findAll());
+        response(rc.response(), HttpResponseStatus.OK, jsonList);
+    }
+
+    public void deleteByShortUrl(RoutingContext rc) {
+        UrlShorten url = repo.findOne(rc.request().getParam("shortUrl"));
+        repo.delete(url);
+        response(rc.response(), HttpResponseStatus.OK);
+    }
+
+    public void goForShortUrl(RoutingContext rc) {
+        UrlShorten url = repo.findOne(rc.request().getParam("shortUrl"));
+
         HttpServerResponse httpResponse = rc.response();
         httpResponse.putHeader("content-type", "application/json");
         httpResponse.setChunked(true);
-        httpResponse.write(gson.toJson(urlShorten));
-        httpResponse.setStatusCode(HttpResponseStatus.CREATED.code());
+        httpResponse.setStatusCode(HttpResponseStatus.FOUND.code());
+        httpResponse.putHeader("location", url.getLongUrl());
         httpResponse.end();
+    }
 
+    private void response(HttpServerResponse httpResponse, HttpResponseStatus status, String response) {
+        httpResponse.putHeader("content-type", "application/json");
+        httpResponse.setChunked(true);
+        httpResponse.setStatusCode(status.code());
+        httpResponse.write(response);
+        httpResponse.end();
+    }
+
+    private void response(HttpServerResponse httpResponse, HttpResponseStatus status) {
+        httpResponse.putHeader("content-type", "application/json");
+        httpResponse.setChunked(true);
+        httpResponse.setStatusCode(status.code());
+        httpResponse.end();
     }
 
 }

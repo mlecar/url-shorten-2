@@ -25,8 +25,7 @@
     
     <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor" />
     
-<!--     <bean id="vertxFactory" class="io.vertx.core.Vertx.factory.VertxFactory"/>
-    
-    <bean id="vertx" class="io.vertx.core.Vertx" factory-bean="vertxFactory" factory-method="vertx" /> -->
+    <bean id="vertx" class="io.vertx.core.Vertx" factory-method="vertx"/>
+    <bean id="router" class="io.vertx.ext.web.Router" factory-method="router" c:_0-ref="vertx" />
 	
 </beans>
